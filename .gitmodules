@@ -1,3 +1,8 @@
+[submodule "shared-schemas"]
+	path = shared-schemas
+	url = https://github.com/mscripts-adherence/shared-schemas.git
+	branch = main
 [submodule "cicd"]
 	path = cicd
 	url = https://github.com/mscripts-adherence/cicd.git
+	branch = MA30-511-knative-install
