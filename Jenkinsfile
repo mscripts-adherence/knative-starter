@@ -80,5 +80,30 @@ pipeline {
                 }
             }
         }
+        stage('Helm Build and Push') {
+            agent { label agents.K8S }
+            when {
+                not {
+                    anyOf {
+                        branch pattern: BRANCH_PATTERN_EXCLUDE_BUILD, comparator: REGEXP
+                    }
+                }
+            }
+            environment {
+                ARTIFACTORY = credentials("$RT_CRED_ID")
+            }
+            steps {
+                script {
+                    sh "./cicd/build/create.values.sh ${image}"
+                    sh "helm package ./charts"
+                    env.CHART_VERSION = sh returnStdout: true, script: 'printf "$(cat "./charts/Chart.yaml" | grep version | cut -d\':\' -f2 | xargs)"'
+                    env.CHART_PACKAGE = "knative-starter-${CHART_VERSION}.tgz"
+
+                    echo 'Pushing helm chart to artifactory'
+                    // def fileSHA = sha1 "./${CHART_PACKAGE}" TODO: Add checksum to artifactory push
+                    sh 'curl -u "${ARTIFACTORY_USR}":"${ARTIFACTORY_PSW}" -T ./"${CHART_PACKAGE}" -X PUT https://artifactory.remscripts.com/artifactory/helm-virtual/'
+                }
+            }
+        }
     }
 }
