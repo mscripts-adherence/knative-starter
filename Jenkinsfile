@@ -120,7 +120,7 @@ pipeline {
                         sh "./cicd/build/build.version.sh dev ${appName} ${appVersion}"
                         env.IMAGE_VERSION = readFile 'build.version'
                         env.IMAGE_VERSION = env.IMAGE_VERSION.trim()
-                        build job: '/adherence/deploy-service', parameters: [string(name: 'APPLICATION', value: "${PROJECT_NAME}"), string(name: 'VERSION', value: "${IMAGE_VERSION}"), string(name: 'ENVIRONMENT', value: "dev")]
+                        build job: '/adherence/deploy-service', parameters: [string(name: 'APPLICATION', value: "${appName}"), string(name: 'VERSION', value: "${IMAGE_VERSION}"), string(name: 'ENVIRONMENT', value: "dev")]
                     }
                 }
                 withAWS(role: AWS_ROLE, roleAccount: ROLE) {
