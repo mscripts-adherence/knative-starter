@@ -1,7 +1,13 @@
-replicaCount: 1
+namespace: $namespace
+labels:
+  app: knative-starter
+image:
+  repository: artifactory.remscripts.com:5001/adherence/knative-starter
+  tag: 1.0.0-f3a2dce
+  pullPolicy: IfNotPresent
 service:
+  type: LoadBalancer
+  port: 80
   annotations:
     service.beta.kubernetes.io/aws-load-balancer-internal: "true"
     service.beta.kubernetes.io/aws-load-balancer-subnets: subnet-00b514c137ba49305, subnet-0ad758091c8831793
-autoscaling:
-  enabled: false

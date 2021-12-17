@@ -1,0 +1,18 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: knative-starter
+  namespace: default
+spec:
+  template:
+    spec:
+      containers:
+        - name: { { .Chart.Name } }
+          image: "{{ .Values.image.repository }}/{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: { { .Values.image.pullPolicy } }
+          envFrom:
+            - secretRef:
+                name: knative-starter-secret
+          env:
+            - name: TARGET
+              value: "KNative Starter"
