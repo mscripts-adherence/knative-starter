@@ -9,7 +9,7 @@ spec:
       containers:
         - name: knative-starter
           image: "{{ .Values.image.repository }}/{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: { { .Values.image.pullPolicy } }
+          imagePullPolicy: "{ { .Values.image.pullPolicy } }"
           envFrom:
             - secretRef:
                 name: knative-starter-secret
