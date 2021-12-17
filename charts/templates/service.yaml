@@ -7,7 +7,7 @@ spec:
   template:
     spec:
       containers:
-        - name: { { .Chart.Name } }
+        - name: knative-starter
           image: "{{ .Values.image.repository }}/{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: { { .Values.image.pullPolicy } }
           envFrom:
