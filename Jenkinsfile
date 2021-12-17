@@ -35,6 +35,7 @@ pipeline {
                     env.CONTEXT = awsContextForEnvironment(env.DEPLOY_ENV)
                     env.ROLE_ACCOUNT = awsAccountForContext(env.CONTEXT)
                     env.PREFIX = 'adherence'
+                    env.APPLICATION = 'KNative Starter'
                     env.appName = 'knative-starter'
                     env.appVersion = sh returnStdout: true, script: "node -e 'console.log(require(\"./package.json\").version)'"
                 }
