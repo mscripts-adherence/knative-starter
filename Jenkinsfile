@@ -115,21 +115,21 @@ pipeline {
                 }
             }
             steps {
-                withCredentials([usernamePassword(credentialsId: '804df528-14cc-4b95-ab95-18a208048c84', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
-                    script {
-                        sh "./cicd/build/build.version.sh dev ${appName} ${appVersion}"
-                        env.IMAGE_VERSION = readFile 'build.version'
-                        env.IMAGE_VERSION = env.IMAGE_VERSION.trim()
-                        build job: '/adherence/deploy-service', parameters: [string(name: 'APPLICATION', value: "${appName}"), string(name: 'VERSION', value: "${IMAGE_VERSION}"), string(name: 'ENVIRONMENT', value: "dev")]
-                    }
-                }
+//                 withCredentials([usernamePassword(credentialsId: '804df528-14cc-4b95-ab95-18a208048c84', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
+//                     script {
+//                         sh "./cicd/build/build.version.sh dev ${appName} ${appVersion}"
+//                         env.IMAGE_VERSION = readFile 'build.version'
+//                         env.IMAGE_VERSION = env.IMAGE_VERSION.trim()
+//                         build job: '/adherence/deploy-service', parameters: [string(name: 'APPLICATION', value: "${appName}"), string(name: 'VERSION', value: "${IMAGE_VERSION}"), string(name: 'ENVIRONMENT', value: "dev")]
+//                     }
+//                 }
                 withAWS(role: AWS_ROLE, roleAccount: ROLE) {
                     script {
                         // Fetching the URL
                         sh "aws eks --region us-east-1 update-kubeconfig --name adherence-dev"
-                        sh "./cicd/deploy/verify.deploy.sh ${PROJECT_NAME} ${PROJECT_NAME} 0"
-                        env.BASE_URL = readFile 'host.url'
-                        env.BASE_URL = env.BASE_URL.trim()
+                        sh "./deploy/install.without.annotations.sh ${appName} dev ${appVersion}"
+                        sh "kubectl get all --all-namespaces"
+                        //sh "./cicd/deploy/verify.deploy.sh ${PROJECT_NAME} ${PROJECT_NAME} 0"
                     }
                 }
             }
