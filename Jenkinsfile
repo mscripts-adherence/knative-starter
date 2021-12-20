@@ -123,11 +123,11 @@ pipeline {
 //                         build job: '/adherence/deploy-service', parameters: [string(name: 'APPLICATION', value: "${appName}"), string(name: 'VERSION', value: "${IMAGE_VERSION}"), string(name: 'ENVIRONMENT', value: "dev")]
 //                     }
 //                 }
-                withAWS(role: AWS_ROLE, roleAccount: ROLE) {
+                withAWS(role: AWS_ROLE, roleAccount: ROLE_ACCOUNT) {
                     script {
                         // Fetching the URL
                         sh "aws eks --region us-east-1 update-kubeconfig --name adherence-dev"
-                        sh "./deploy/install.without.annotations.sh ${appName} dev ${appVersion}"
+                        sh "./cicd/deploy/install.without.annotations.sh ${appName} dev ${appVersion}"
                         sh "kubectl get all --all-namespaces"
                         //sh "./cicd/deploy/verify.deploy.sh ${PROJECT_NAME} ${PROJECT_NAME} 0"
                     }
