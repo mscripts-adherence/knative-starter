@@ -8,7 +8,7 @@ spec:
     spec:
       containers:
         - name: knative-starter
-          image: "{{ .Values.image.repository }}/{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           envFrom:
             - secretRef:
                 name: knative-starter-secret
