@@ -1,4 +1,4 @@
 [submodule "cicd"]
 	path = cicd
 	url = https://github.com/mscripts-adherence/cicd.git
-	branch = main
+	branch = MA30-510
