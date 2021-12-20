@@ -127,7 +127,7 @@ pipeline {
                     script {
                         // Fetching the URL
                         sh "aws eks --region us-east-1 update-kubeconfig --name adherence-dev"
-                        sh "./cicd/deploy/install.without.annotations.sh ${appName} dev ${appVersion}"
+                        sh "./cicd/deploy/install.without.annotations.sh ${appName} dev ${image}"
                         sh "kubectl get all --all-namespaces"
                         //sh "./cicd/deploy/verify.deploy.sh ${PROJECT_NAME} ${PROJECT_NAME} 0"
                     }
