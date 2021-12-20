@@ -1,5 +1,3 @@
 namespace: knative-starter
 service:
   annotations:
-    service.beta.kubernetes.io/aws-load-balancer-internal: "true"
-    service.beta.kubernetes.io/aws-load-balancer-subnets: subnet-00b514c137ba49305, subnet-0ad758091c8831793
