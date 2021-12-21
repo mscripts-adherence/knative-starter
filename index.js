@@ -2,26 +2,26 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser')
 
-let lastMessage = 'World';
+let lastMessage = '';
 
 app.use(bodyParser());
 
 app.get('/', (req, res) => {
   console.log('Hello world received a request.');
 
-  const target = process.env.TARGET || lastMessage;
+  const target = lastMessage || process.env.TARGET || "World";
   res.send(`Hello ${target}!\n`);
 });
 
 app.get('/message', (req, res) => {
   lastMessage = JSON.stringify(req.body);
-  const target = process.env.TARGET || lastMessage;
+  const target = lastMessage || process.env.TARGET || "World";
   res.send(`Hello ${target}!\n`);
 });
 
 app.post('/message', (req, res) => {
   lastMessage = JSON.stringify(req.body);
-  const target = process.env.TARGET || lastMessage;
+  const target = lastMessage || process.env.TARGET || "World";
   res.send(`Hello ${target}!\n`);
 });
 
