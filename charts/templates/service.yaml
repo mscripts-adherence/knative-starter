@@ -12,6 +12,9 @@ metadata:
   namespace: knative-starter
 spec:
   template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/min-scale: "1"
     spec:
       containers:
         - name: knative-starter
@@ -19,3 +22,26 @@ spec:
           env:
             - name: TARGET
               value: "KNative Starter"
+---
+apiVersion: eventing.knative.dev/v1
+kind: Broker
+metadata:
+  name: default
+  namespace: knative-starter
+---
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: knative-starter
+  namespace: knative-starter
+spec:
+  broker: default
+  filter:
+    attributes:
+      type: greeting
+  subscriber:
+    ref:
+      apiVersion: v1
+      kind: Service
+      name: knative-starter
+    uri: /message
