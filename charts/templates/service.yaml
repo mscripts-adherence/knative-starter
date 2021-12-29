@@ -31,10 +31,10 @@ spec:
   broker: default
   filter:
     attributes:
-      type: greeting
+      type: inbound
   subscriber:
     ref:
       apiVersion: v1
       kind: Service
       name: knative-starter
-    uri: /message
+    uri: /inbound
