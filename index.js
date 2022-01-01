@@ -13,13 +13,13 @@ app.get('/', (req, res) => {
   res.send(`Hello ${target}!\n`);
 });
 
-app.get('/message', (req, res) => {
+app.get('/inbound', (req, res) => {
   lastMessage = JSON.stringify(req.body);
   const target = lastMessage || process.env.TARGET || "World";
   res.send(`Hello ${target}!\n`);
 });
 
-app.post('/message', (req, res) => {
+app.post('/inbound', (req, res) => {
   lastMessage = JSON.stringify(req.body);
   const target = lastMessage || process.env.TARGET || "World";
   res.send(`Hello ${target}!\n`);
