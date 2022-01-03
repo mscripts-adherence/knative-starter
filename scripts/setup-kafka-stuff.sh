@@ -24,6 +24,8 @@ data:
   bootstrap.servers: "$(kubectl get service $KNATIVE_SETUP_KAFKA_BOOTSTRAP_NAME --template={{.spec.clusterIP}}):9092"
 EOF
 
+## TODO: is a wait needed here?  We are dependent on kafka being up
+
 # add kafka broker
 cat <<EOF | kubectl apply -f -                              
 apiVersion: eventing.knative.dev/v1
@@ -32,7 +34,7 @@ metadata:
   annotations:
     # case-sensitive
     eventing.knative.dev/broker.class: Kafka
-  name: default
+  name: kafka-broker
   namespace: default
 spec:
   # Configuration specific to this broker.

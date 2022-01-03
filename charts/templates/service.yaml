@@ -28,7 +28,7 @@ metadata:
   name: knative-starter-inbound
   namespace: knative-starter
 spec:
-  broker: default
+  broker: kafka-broker
   filter:
     attributes:
       type: inbound
