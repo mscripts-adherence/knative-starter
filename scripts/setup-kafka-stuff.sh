@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # install various eventing kafka modules (all are not likely needed)
-kubectl apply --filename https://github.com/knative-sandbox/eventing-kafka-broker/releases/download/knative-v1.1.0/eventing-kafka.yaml --validate=false
-kubectl apply --filename https://github.com/knative-sandbox/eventing-kafka-broker/releases/download/knative-v1.1.0/eventing-kafka-controller.yaml
-kubectl apply --filename https://github.com/knative-sandbox/eventing-kafka-broker/releases/download/knative-v1.1.0/eventing-kafka-broker.yaml
-kubectl apply --filename https://github.com/knative-sandbox/eventing-kafka-broker/releases/download/knative-v1.1.0/eventing-kafka-sink.yaml
+kubectl apply --filename https://github.com/knative-sandbox/eventing-kafka-broker/releases/download/knative-v1.0.5/eventing-kafka.yaml
+kubectl apply --filename https://github.com/knative-sandbox/eventing-kafka-broker/releases/download/knative-v1.0.5/eventing-kafka-controller.yaml
+kubectl apply --filename https://github.com/knative-sandbox/eventing-kafka-broker/releases/download/knative-v1.0.5/eventing-kafka-broker.yaml
+kubectl apply --filename https://github.com/knative-sandbox/eventing-kafka-broker/releases/download/knative-v1.0.5/eventing-kafka-sink.yaml
 
 # TODO: is a wait needed here?
 kubectl api-resources | grep broker
