@@ -8,7 +8,7 @@ image:
   repository: artifactory.remscripts.com:5001/adherence/knative-starter
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: 1.0.0-a319424
+  tag: 1.0.0-6641c63
 
 imagePullSecrets: []
 nameOverride: ""
