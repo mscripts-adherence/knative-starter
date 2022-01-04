@@ -21,7 +21,7 @@ data:
   # Replication factor of topic messages.
   default.topic.replication.factor: "1"
   # A comma separated list of bootstrap servers. (It can be in or out the k8s cluster)
-  bootstrap.servers: "$(kubectl get service $KNATIVE_SETUP_KAFKA_BOOTSTRAP_NAME --template={{.spec.clusterIP}}):9092"
+  bootstrap.servers: "$(kubectl get service kafka --template={{.spec.clusterIP}}):9092"
 EOF
 
 ## TODO: is a wait needed here?  We are dependent on kafka being up

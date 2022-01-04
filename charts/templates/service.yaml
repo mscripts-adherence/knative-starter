@@ -17,16 +17,10 @@ spec:
               value: "KNative Starter"
 ---
 apiVersion: eventing.knative.dev/v1
-kind: Broker
-metadata:
-  name: default
-  namespace: knative-starter
----
-apiVersion: eventing.knative.dev/v1
 kind: Trigger
 metadata:
   name: knative-starter-inbound
-  namespace: knative-starter
+  namespace: default
 spec:
   broker: kafka-broker
   filter:
@@ -37,62 +31,11 @@ spec:
       apiVersion: v1
       kind: Service
       name: knative-starter
+      namespace: knative-starter
     uri: /inbound
 ---
-#apiVersion: sources.knative.dev/v1
-#kind: SinkBinding
-#metadata:
-#  name: knative-starter-outbound
-#spec:
-#  subject:
-#    apiVersion: v1
-#    kind: Service
-#    selector:
-#      matchLabels:
-#        <label-key>: <label-value>
-#  sink:
-#    ref:
-#      apiVersion: serving.knative.dev/v1
-#      kind: Service
-#      name: <sink>
-#---
-#apiVersion: sources.knative.dev/v1beta1
-#kind: KafkaSource
-#metadata:
-#  name: kafka-source
-#spec:
-#  bootstrapServers: "{{ .Values.kafka.bootstrapServers }}"
-#  topics:
-#    - output-events
-#  sink:
-#    ref:
-#      apiVersion: serving.knative.dev/v1
-#      kind: Service
-#      name: knative-starter
-#    uri: /customers/reserve
-apiVersion: bindings.knative.dev/v1beta1
-kind: KafkaBinding
+apiVersion: eventing.knative.dev/v1
+kind: Broker
 metadata:
-  name: kafka-binding-knative-starter
-spec:
-  subject:
-    apiVersion: serving.knative.dev/v1
-    kind: Service
-    name: knative-starter
-  bootstrapServers: "{{ .Values.kafka.bootstrapServers }}"
----
-# here, we "mock" another service receiving an event
-apiVersion: sources.knative.dev/v1beta1
-kind: KafkaSource
-metadata:
-  name: kafka-source
-spec:
-  bootstrapServers: "{{ .Values.kafka.bootstrapServers }}"
-  topics:
-    - starter-events
-  sink:
-    ref:
-      apiVersion: serving.knative.dev/v1
-      kind: Service
-      name: knative-starter
-    uri: /loopback
+  name: default
+  namespace: knative-starter

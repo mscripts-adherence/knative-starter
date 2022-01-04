@@ -1,16 +1,5 @@
 #!/bin/zsh
 
-#if [ "$(kubectl get pod kafka-0 --template={{.status.phase}})" != "Running" ]; then
-#  helm repo add bitnami https://charts.bitnami.com/bitnami
-#  helm install kafka bitnami/kafka
-#fi
-#
-#until [ "$(kubectl get pod kafka-0 --template={{.status.phase}})" = "Running" ];
-#do
-#  echo "Waiting for kafka......"
-#  sleep 15s
-#done
-
 # install knative operator
 kubectl apply -f https://github.com/knative/operator/releases/download/knative-v1.1.0/operator.yaml
 

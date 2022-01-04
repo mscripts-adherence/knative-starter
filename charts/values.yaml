@@ -10,9 +10,6 @@ image:
   # Overrides the image tag whose default is the chart appVersion.
   tag: 1.0.0-a319424
 
-kafka:
-  bootstrapServers: "10.106.25.210:9092"
-
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
