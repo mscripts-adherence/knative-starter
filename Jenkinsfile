@@ -94,7 +94,7 @@ pipeline {
             }
             steps {
                 script {
-                    sh "./cicd/build/create.values.sh ${image}"
+                    sh "./scripts/create.values.sh ${image}"
                     sh "helm package ./charts"
                     env.CHART_VERSION = sh returnStdout: true, script: 'printf "$(cat "./charts/Chart.yaml" | grep version | cut -d\':\' -f2 | xargs)"'
                     env.CHART_PACKAGE = "knative-starter-${CHART_VERSION}.tgz"

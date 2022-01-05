@@ -8,11 +8,13 @@ image:
   repository: artifactory.remscripts.com:5001/adherence/knative-starter
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: 1.0.0-6641c63
+  tag: 1.0.0-b747fa4
 
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
+knative:
+  brokerUrl: "http://kafka-broker-ingress.knative-eventing.svc.cluster.local/default/kafka-broker"
 
 serviceAccount:
   # Specifies whether a service account should be created

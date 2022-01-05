@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const axios = require("axios").default;
 const { HTTP, CloudEvent } = require("cloudevents");
 
-const BROKER_URL = process.env.ADHERENCE_BROKER
+const BROKER_URL = process.env.ADHERENCE_BROKER_URL
 
 // TODO: switch to fastify from express
 
