@@ -5,16 +5,10 @@ metadata:
   namespace: knative-starter
 spec:
   template:
-    metadata:
-      annotations:
-        autoscaling.knative.dev/min-scale: "1"
     spec:
       containers:
         - name: knative-starter
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          env:
-            - name: TARGET
-              value: "KNative Starter"
 ---
 apiVersion: eventing.knative.dev/v1
 kind: Trigger
@@ -33,9 +27,3 @@ spec:
       name: knative-starter
       namespace: knative-starter
     uri: /inbound
----
-apiVersion: eventing.knative.dev/v1
-kind: Broker
-metadata:
-  name: default
-  namespace: knative-starter
