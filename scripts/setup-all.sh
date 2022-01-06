@@ -5,11 +5,9 @@ if [ "$(kubectl get pod kafka-0 --template={{.status.phase}})" != "Running" ]; t
   helm repo add bitnami https://charts.bitnami.com/bitnami
   helm install kafka bitnami/kafka
 fi
-until [ "$(kubectl get pod kafka-0 --template={{.status.phase}})" = "Running" ];
-do
-  echo "Waiting for kafka......"
-  sleep 15s
-done
+
+echo "waiting up to 5 minutes for kafka to start"
+kubectl wait --for=condition=ready pod/kafka-0 --timeout=5m
 
 ./setup-knative.sh
 ./setup-kafka-knative.sh
