@@ -63,7 +63,7 @@ pipeline {
                         sh "kubectl apply --filename https://github.com/knative-sandbox/eventing-kafka-broker/releases/download/knative-v1.0.5/eventing-kafka-controller.yaml"
                         sh "kubectl apply --filename https://github.com/knative-sandbox/eventing-kafka-broker/releases/download/knative-v1.0.5/eventing-kafka-broker.yaml"
                         sh "kubectl apply --filename https://github.com/knative-sandbox/eventing-kafka-broker/releases/download/knative-v1.0.5/eventing-kafka-sink.yaml"
-                        sh "kubectl -n knative-eventing set env deployments eventing-webhook --containers="eventing-webhook" SINK_BINDING_SELECTION_MODE=inclusion"
+                        sh "kubectl -n knative-eventing set env deployments eventing-webhook --containers=\"eventing-webhook\" SINK_BINDING_SELECTION_MODE=inclusion"
                     }
                 }
             }
