@@ -1,7 +1,7 @@
 #!/usr/bin/env groovy
 
 def scmCredentialsID = '804df528-14cc-4b95-ab95-18a208048c84'
-library identifier: 'jenkins-shared@MA30-511-normalize-knative-install',
+library identifier: 'jenkins-shared@MA30-510-knative-starter',
     retriever: modernSCM([
       $class: 'GitSCMSource',
       credentialsId: scmCredentialsID,
@@ -51,7 +51,19 @@ pipeline {
                 withAWS(role: AWS_ROLE, roleAccount: ROLE_ACCOUNT) {
                     script {
                         sh "aws eks --region us-east-1 update-kubeconfig --name adherence-${DEPLOY_ENV}"
-                        ensureKNativeInstallation()
+
+
+                        // NOTE: in testing, we applied this yaml multiple times and it did not change the deployment adversely
+                        // if anything, this will let us update the configuration if needed without having to update a "needs update" check
+                        sh "kubectl apply -f https://github.com/knative/operator/releases/download/knative-v1.1.0/operator.yaml"
+                        sh "kubectl apply -f ./cicd/yaml/Knative-Serving-Install.yaml"
+                        sh "kubectl apply -f ./cicd/yaml/Knative-Eventing-Install.yaml"
+                        sh "kubectl apply -f ./cicd/yaml/Knative-Eventing-Kafka.yaml"
+                        sh "kubectl apply --filename https://github.com/knative-sandbox/eventing-kafka-broker/releases/download/knative-v1.0.5/eventing-kafka.yaml"
+                        sh "kubectl apply --filename https://github.com/knative-sandbox/eventing-kafka-broker/releases/download/knative-v1.0.5/eventing-kafka-controller.yaml"
+                        sh "kubectl apply --filename https://github.com/knative-sandbox/eventing-kafka-broker/releases/download/knative-v1.0.5/eventing-kafka-broker.yaml"
+                        sh "kubectl apply --filename https://github.com/knative-sandbox/eventing-kafka-broker/releases/download/knative-v1.0.5/eventing-kafka-sink.yaml"
+                        sh "kubectl -n knative-eventing set env deployments eventing-webhook --containers=\"eventing-webhook\" SINK_BINDING_SELECTION_MODE=inclusion"
                     }
                 }
             }
@@ -76,6 +88,60 @@ pipeline {
                         sh "docker push ${image}"
                         sh "docker image prune -af"
                         env.IMAGE = sh returnStdout: true, script: 'printf "$(cat "build.version" | cut -d\':\' -f2 | xargs)"'
+                    }
+                }
+            }
+        }
+        stage('Helm Build and Push') {
+            agent { label agents.K8S }
+            when {
+                not {
+                    anyOf {
+                        branch pattern: BRANCH_PATTERN_EXCLUDE_BUILD, comparator: REGEXP
+                    }
+                }
+            }
+            environment {
+                ARTIFACTORY = credentials("$RT_CRED_ID")
+            }
+            steps {
+                script {
+                    sh "./scripts/create.values.sh ${image}"
+                    sh "helm package ./charts"
+                    env.CHART_VERSION = sh returnStdout: true, script: 'printf "$(cat "./charts/Chart.yaml" | grep version | cut -d\':\' -f2 | xargs)"'
+                    env.CHART_PACKAGE = "knative-starter-${CHART_VERSION}.tgz"
+
+                    echo 'Pushing helm chart to artifactory'
+                    // def fileSHA = sha1 "./${CHART_PACKAGE}" TODO: Add checksum to artifactory push
+                    sh 'curl -u "${ARTIFACTORY_USR}":"${ARTIFACTORY_PSW}" -T ./"${CHART_PACKAGE}" -X PUT https://artifactory.remscripts.com/artifactory/helm-virtual/'
+                }
+            }
+        }
+        stage('Build from version branch') {
+            agent { label agents.K8S }
+            when {
+                not {
+                    anyOf {
+                        branch pattern: BRANCH_PATTERN_EXCLUDE_BUILD, comparator: REGEXP
+                    }
+                }
+            }
+            steps {
+//                 withCredentials([usernamePassword(credentialsId: '804df528-14cc-4b95-ab95-18a208048c84', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
+//                     script {
+//                         sh "./cicd/build/build.version.sh dev ${appName} ${appVersion}"
+//                         env.IMAGE_VERSION = readFile 'build.version'
+//                         env.IMAGE_VERSION = env.IMAGE_VERSION.trim()
+//                         build job: '/adherence/deploy-service', parameters: [string(name: 'APPLICATION', value: "${appName}"), string(name: 'VERSION', value: "${IMAGE_VERSION}"), string(name: 'ENVIRONMENT', value: "dev")]
+//                     }
+//                 }
+                withAWS(role: AWS_ROLE, roleAccount: ROLE_ACCOUNT) {
+                    script {
+                        // Fetching the URL
+                        sh "aws eks --region us-east-1 update-kubeconfig --name adherence-dev"
+                        sh "./cicd/deploy/install.without.annotations.sh ${appName} dev ${image}"
+                        sh "kubectl get all --all-namespaces"
+                        //sh "./cicd/deploy/verify.deploy.sh ${PROJECT_NAME} ${PROJECT_NAME} 0"
                     }
                 }
             }

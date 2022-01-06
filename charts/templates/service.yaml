@@ -1,0 +1,35 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: knative-starter
+  namespace: knative-starter
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/min-scale: "1"
+    spec:
+      containers:
+        - name: knative-starter
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          env:
+            - name: ADHERENCE_BROKER_URL
+              value: "{{ .Values.knative.brokerUrl }}"
+---
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: knative-starter-inbound
+  namespace: default
+spec:
+  broker: kafka-broker
+  filter:
+    attributes:
+      type: inbound
+  subscriber:
+    ref:
+      apiVersion: v1
+      kind: Service
+      name: knative-starter
+      namespace: knative-starter
+    uri: /inbound
