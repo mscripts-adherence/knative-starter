@@ -52,10 +52,10 @@ pipeline {
                     script {
                         sh "aws eks --region us-east-1 update-kubeconfig --name adherence-${DEPLOY_ENV}"
 
-                        
+
                         // NOTE: in testing, we applied this yaml multiple times and it did not change the deployment adversely
                         // if anything, this will let us update the configuration if needed without having to update a "needs update" check
-                        sh "kubectl apply -f https://github.com/knative/operator/releases/download/knative-v1.0.5/operator.yaml"
+                        sh "kubectl apply -f https://github.com/knative/operator/releases/download/knative-v1.1.0/operator.yaml"
                         sh "kubectl apply -f ./cicd/yaml/Knative-Serving-Install.yaml"
                         sh "kubectl apply -f ./cicd/yaml/Knative-Eventing-Install.yaml"
                         sh "kubectl apply -f ./cicd/yaml/Knative-Eventing-Kafka.yaml"
