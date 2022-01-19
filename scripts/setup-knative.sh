@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/env bash
 
 # install knative operator
 kubectl apply -f https://github.com/knative/operator/releases/download/knative-v1.1.0/operator.yaml

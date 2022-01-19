@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/env bash
 
 # install bitnami kafka
 if [ "$(kubectl get pod kafka-0 --template={{.status.phase}})" != "Running" ]; then
