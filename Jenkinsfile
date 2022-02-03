@@ -1,7 +1,7 @@
 #!/usr/bin/env groovy
 
 def scmCredentialsID = '804df528-14cc-4b95-ab95-18a208048c84'
-library identifier: 'jenkins-shared@main',
+library identifier: 'jenkins-shared@MA30-570',
     retriever: modernSCM([
       $class: 'GitSCMSource',
       credentialsId: scmCredentialsID,
@@ -54,6 +54,7 @@ pipeline {
 
                         ensureKNativeInstallation()
                         ensureKNativeKafkaInstallation()
+                        ensureFluidBitInstallation()
                     }
                 }
             }
