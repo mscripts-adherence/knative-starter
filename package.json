@@ -12,6 +12,6 @@
   "dependencies": {
     "axios": "^0.24.0",
     "cloudevents": "^5.2.0",
-    "fastify": "^3.25.3"
+    "fastify": "^3.29.4"
   }
 }
